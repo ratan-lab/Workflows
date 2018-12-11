@@ -1,0 +1,26 @@
+{
+  "##_COMMENT1": "SAMPLE INFO",
+  "align_dna.sample": "String",
+  "align_dna.lib": "String",
+  "align_dna.lane_num": "String? (optional)",
+  "align_dna.platform_name": "String? (optional)",
+  "align_dna.fq": "String",
+  "align_dna.mq": "String? (optional)",
+  "align_dna.read_group": "String? (optional)",
+
+  "##_COMMENT2": "TOOLS",
+  "align_dna.bwa": "String",
+  "align_dna.bwa_options": "String? (optional)",
+  "align_dna.num_threads": "Int? (optional)",
+  "align_dna.sambamba": "String",
+  "align_dna.mem_sambamba": "Int? (optional)",
+  "align_dna.samtools": "String",
+  "align_dna.samblaster": "String",
+
+  "##_COMMENT3": "OUTPUT AND PIPELINE OPTIONS",
+  "align_dna.reference": "String",
+  "align_dna.mark_dups": "Boolean? (optional)",
+  "align_dna.tmp_dir": "String",
+  "align_dna.out_dir": "String",
+  "align_dna.out_prefix": "String? (optional)"
+}
