@@ -1,0 +1,15 @@
+{
+  "##_COMMENT1": "DATA INFO",
+  "fastqc.fastq_files":"Array[String]",
+  "fastqc.adapters_file": "(optional) String?",
+  "fastqc.num_kmers": "(optional) Int?",
+  "fastqc.contaminants_file": "(optional) String?",
+
+  "##_COMMENT2": "TOOLS",
+  "fastqc.java": "String",
+  "fastqc.fastqc": "String",
+  "fastqc.multiqc": "String",
+
+  "##_COMMENT3": "OUTPUT",
+  "fastqc.out_dir": "String"
+}
