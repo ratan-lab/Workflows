@@ -30,6 +30,7 @@ Currently, the following configurations are supported for each of the workflows:
 # Rivanna
 The current configuration needs to be modified depending on the workflow. Specifically the following variables are defined and may need to be changed for the specific workflow
 
+```
 concurrent-job-limit = 500
 runtime-attributes = """
 Int nodes = 1
@@ -40,6 +41,7 @@ String partition = "parallel"
 Int requested_mem_per_cpu = 6000
 String account = "ratan"
 """
+```
 
 # Style preference
 In the absence of a style guide, the following should be followed:
