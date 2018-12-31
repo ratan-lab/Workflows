@@ -60,10 +60,18 @@ workflow HaplotypeCaller_sl {
       gatk_path = gatk_path
   }
 
+  # Put the final output files in an organized manner
+  call Moritsuke {
+    input:
+      sample_name = sample_name,
+      gvcf_filename = MergeGVCFs.output_vcf,
+      gvcf_index_filename = MergeGVCFs.output_vcf_index
+  }
+
   # Outputs that will be retained when execution is complete
   output {
-    File output_vcf = MergeGVCFs.output_vcf
-    File output_vcf_index = MergeGVCFs.output_vcf_index
+    File output_vcf = Moritsuke.output_vcf
+    File output_vcf_index = Moritsuke.output_vcf_index
   }
 }
 
@@ -170,4 +178,28 @@ task MergeGVCFs {
     File output_vcf = "${output_filename}"
     File output_vcf_index = "${output_filename}.tbi"
   }
+}
+
+task Moritsuke {
+  # Command parameters
+  String sample_name
+  File gvcf_filename 
+  File gvcf_index_filename
+
+  String gvcf_basename = basename(gvcf_filename)
+  String gvcf_index_basename = basename(gvcf_index_filename)
+
+  command {
+    set -e 
+    set -o pipefail
+
+    mkdir -p ${sample_name}
+    mv ${gvcf_filename} ${sample_name}/${gvcf_basename}
+    mv ${gvcf_index_filename} ${sample_name}/${gvcf_index_basename}
+  }
+ 
+  output {
+    File output_vcf = "${sample_name}/${gvcf_basename}"
+    File output_vcf_index = "${sample_name}/${gvcf_index_basename}"
+  } 
 }
