@@ -2,24 +2,21 @@ workflow HaplotypeCaller_sl {
   String sample_name
   File input_bam
   File input_bam_index
+  String output_dir
 
   File ref_dict
   File ref_fasta
   File ref_fasta_index
   File scattered_calling_intervals_list
 
-  Boolean? make_gvcf
-  Boolean making_gvcf = select_first([make_gvcf,true])
-
   Array[File] scattered_calling_intervals = read_lines(scattered_calling_intervals_list)
 
-  String? gatk_path_override
-  String gatk_path = select_first([gatk_path_override, "/gatk/gatk"])
+  String gatk_path
 
   #is the input a cram file?
   Boolean is_cram = sub(basename(input_bam), ".*\\.", "") == "cram"
 
-  String output_suffix = if making_gvcf then ".g.vcf.gz" else ".vcf.gz"
+  String output_suffix = ".g.vcf.gz"
   String output_filename = sample_name + output_suffix
 
   if ( is_cram ) {
@@ -46,7 +43,6 @@ workflow HaplotypeCaller_sl {
         ref_dict = ref_dict,
         ref_fasta = ref_fasta,
         ref_fasta_index = ref_fasta_index,
-        make_gvcf = making_gvcf,
         gatk_path = gatk_path
     }
   }
@@ -63,7 +59,7 @@ workflow HaplotypeCaller_sl {
   # Put the final output files in an organized manner
   call Moritsuke {
     input:
-      sample_name = sample_name,
+      output_dir = output_dir,
       gvcf_filename = MergeGVCFs.output_vcf,
       gvcf_index_filename = MergeGVCFs.output_vcf_index
   }
@@ -84,9 +80,6 @@ task CramToBamTask {
   File input_cram
   String sample_name
 
-  # Runtime parameters
-  Int? mem_gb
-  Int machine_mem_gb = select_first([mem_gb, 7])
 
   command {
     set -e
@@ -99,7 +92,8 @@ task CramToBamTask {
   }
 
   runtime {
-    memory: select_first([machine_mem_gb, 15]) + " GB"
+    memory: "10 GB"
+    cpu: "2"
   }
 
   output {
@@ -116,15 +110,13 @@ task HaplotypeCaller {
   File ref_dict
   File ref_fasta
   File ref_fasta_index
-  Boolean make_gvcf
 
   String gatk_path
   String? java_options
   String java_opt = select_first([java_options, "-XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10"])
 
   # Runtime parameters
-  Int? mem_gb
-  Int machine_mem_gb = select_first([mem_gb, 7])
+  Int machine_mem_gb = 6
   Int command_mem_gb = machine_mem_gb - 1
 
   command <<<
@@ -136,7 +128,7 @@ task HaplotypeCaller {
       -I ${input_bam} \
       -L ${interval_list} \
       -O ${output_filename} \
-      ${true="-ERC GVCF" false="" make_gvcf}
+      -ERC GVCF
   >>>
 
   runtime {
@@ -157,8 +149,7 @@ task MergeGVCFs {
   String gatk_path
 
   # Runtime parameters
-  Int? mem_gb
-  Int machine_mem_gb = select_first([mem_gb, 3])
+  Int machine_mem_gb = 6
   Int command_mem_gb = machine_mem_gb - 1
 
   command <<<
@@ -182,7 +173,7 @@ task MergeGVCFs {
 
 task Moritsuke {
   # Command parameters
-  String sample_name
+  String output_dir
   File gvcf_filename 
   File gvcf_index_filename
 
@@ -193,13 +184,13 @@ task Moritsuke {
     set -e 
     set -o pipefail
 
-    mkdir -p ${sample_name}
-    mv ${gvcf_filename} ${sample_name}/${gvcf_basename}
-    mv ${gvcf_index_filename} ${sample_name}/${gvcf_index_basename}
+    mkdir -p ${output_dir}
+    mv ${gvcf_filename} ${output_dir}/${gvcf_basename}
+    mv ${gvcf_index_filename} ${output_dir}/${gvcf_index_basename}
   }
  
   output {
-    File output_vcf = "${sample_name}/${gvcf_basename}"
-    File output_vcf_index = "${sample_name}/${gvcf_index_basename}"
+    File output_vcf = "${output_dir}/${gvcf_basename}"
+    File output_vcf_index = "${output_dir}/${gvcf_index_basename}"
   } 
 }

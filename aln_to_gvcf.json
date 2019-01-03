@@ -1,19 +1,16 @@
 {
-  "##_COMMENT1": "SAMPLE INFO",
+  "##_COMMENT1": "INPUT AND OUTPUT INFO",
   "HaplotypeCaller_sl.sample_name": "String",
   "HaplotypeCaller_sl.input_bam": "File",
   "HaplotypeCaller_sl.input_bam_index": "File",
+  "HaplotypeCaller_sl.output_dir": "File",
 
-  "##_COMMENT2": "TOOLS AND OPTIONS",
-  "HaplotypeCaller_sl.gatk_path_override": "String? (optional)",
-  "HaplotypeCaller_sl.HaplotypeCaller.mem_gb": "Int? (optional)",
-  "HaplotypeCaller_sl.CramToBamTask.mem_gb": "Int? (optional)",
+  "##_COMMENT2": "TOOLS OPTIONS",
+  "HaplotypeCaller_sl.gatk_path": "String",
   "HaplotypeCaller_sl.HaplotypeCaller.java_options": "String? (optional)",
-  "HaplotypeCaller_sl.make_gvcf": "Boolean? (optional)",
-  "HaplotypeCaller_sl.MergeGVCFs.mem_gb": "Int? (optional)",
   "HaplotypeCaller_sl.scattered_calling_intervals_list": "File",
 
-  "##_COMMENT3": "OUTPUT AND PIPELINE OPTIONS",
+  "##_COMMENT3": "REFERENCE OPTIONS",
   "HaplotypeCaller_sl.ref_fasta": "File",
   "HaplotypeCaller_sl.ref_fasta_index": "File",
   "HaplotypeCaller_sl.ref_dict": "File"
