@@ -101,6 +101,7 @@ task CramToBamTask {
     File output_bai = "${sample_name}.bai"
   }
 }
+
 # HaplotypeCaller per-sample in GVCF mode
 task HaplotypeCaller {
   File input_bam
@@ -140,6 +141,7 @@ task HaplotypeCaller {
     File output_vcf_index = "${output_filename}.tbi"
   }
 }
+
 # Merge GVCFs generated per-interval for the same sample
 task MergeGVCFs {
   Array[File] input_vcfs
