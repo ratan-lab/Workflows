@@ -2,7 +2,8 @@ workflow JointGenotyping {
   File unpadded_intervals_file
 
   String callset_name
-  
+  String output_dir
+
   File ref_fasta
   File ref_fasta_index
   File ref_dict
@@ -15,11 +16,6 @@ workflow JointGenotyping {
   Array[File] input_gvcfs_indices 
 
   String gatk_path
-
-  Int small_disk
-  Int medium_disk
-  Int large_disk
-  Int huge_disk
 
   Array[String] snp_recalibration_tranche_values
   Array[String] snp_recalibration_annotation_values
@@ -74,7 +70,6 @@ workflow JointGenotyping {
         workspace_dir_name = "genomicsdb",
         input_gvcfs = input_gvcfs,
         input_gvcfs_indices = input_gvcfs_indices,
-        disk_size = medium_disk,
         gatk_path = gatk_path,
         batch_size = 50
     }
@@ -89,7 +84,6 @@ workflow JointGenotyping {
         ref_dict = ref_dict,
         dbsnp_vcf = dbsnp_vcf,
         dbsnp_vcf_index = dbsnp_vcf_index,
-        disk_size = medium_disk,
         gatk_path = gatk_path
     }
 
@@ -100,7 +94,6 @@ workflow JointGenotyping {
         excess_het_threshold = excess_het_threshold,
         variant_filtered_vcf_filename = callset_name + "." + idx + ".variant_filtered.vcf.gz",
         sites_only_vcf_filename = callset_name + "." + idx + ".sites_only.variant_filtered.vcf.gz",
-        disk_size = medium_disk,
         gatk_path = gatk_path
     }
   }
@@ -110,7 +103,6 @@ workflow JointGenotyping {
       input_vcfs_fofn = HardFilterAndMakeSitesOnlyVcf.sites_only_vcf,
       input_vcf_indexes_fofn = HardFilterAndMakeSitesOnlyVcf.sites_only_vcf_index,
       output_vcf_name = callset_name + ".sites_only.vcf.gz",
-      disk_size = medium_disk,
       gatk_path = gatk_path
   }
 
@@ -128,7 +120,6 @@ workflow JointGenotyping {
       axiomPoly_resource_vcf_index = axiomPoly_resource_vcf_index,
       dbsnp_resource_vcf = dbsnp_resource_vcf,
       dbsnp_resource_vcf_index = dbsnp_resource_vcf_index,
-      disk_size = small_disk,
       gatk_path = gatk_path
   }
 
@@ -151,7 +142,6 @@ workflow JointGenotyping {
         one_thousand_genomes_resource_vcf_index = one_thousand_genomes_resource_vcf_index,
         dbsnp_resource_vcf = dbsnp_resource_vcf,
         dbsnp_resource_vcf_index = dbsnp_resource_vcf_index,
-        disk_size = small_disk,
         gatk_path = gatk_path
     }
 
@@ -173,7 +163,6 @@ workflow JointGenotyping {
         one_thousand_genomes_resource_vcf_index = one_thousand_genomes_resource_vcf_index,
         dbsnp_resource_vcf = dbsnp_resource_vcf,
         dbsnp_resource_vcf_index = dbsnp_resource_vcf_index,
-        disk_size = small_disk,
         gatk_path = gatk_path
       }
     }
@@ -181,7 +170,6 @@ workflow JointGenotyping {
         input:
           input_fofn = SNPsVariantRecalibratorScattered.tranches,
           output_filename = callset_name + ".snps.gathered.tranches",
-          disk_size = small_disk,
           gatk_path = gatk_path
     }
   }
@@ -203,7 +191,6 @@ workflow JointGenotyping {
           one_thousand_genomes_resource_vcf_index = one_thousand_genomes_resource_vcf_index,
           dbsnp_resource_vcf = dbsnp_resource_vcf,
           dbsnp_resource_vcf_index = dbsnp_resource_vcf_index,
-          disk_size = small_disk,
           gatk_path = gatk_path
     }
   }
@@ -226,7 +213,6 @@ workflow JointGenotyping {
         snps_tranches = select_first([SNPGatherTranches.tranches, SNPsVariantRecalibratorClassic.tranches]),
         indel_filter_level = indel_filter_level,
         snp_filter_level = snp_filter_level,
-        disk_size = medium_disk,
         gatk_path = gatk_path
     }
 
@@ -241,7 +227,6 @@ workflow JointGenotyping {
           dbsnp_vcf_index = dbsnp_vcf_index,
           interval_list = eval_interval_list,
           ref_dict = ref_dict,
-          disk_size = medium_disk,
           gatk_path = gatk_path
       }
     }
@@ -254,7 +239,6 @@ workflow JointGenotyping {
         input_vcfs_fofn = ApplyRecalibration.recalibrated_vcf,
         input_vcf_indexes_fofn = ApplyRecalibration.recalibrated_vcf_index,
         output_vcf_name = callset_name + ".vcf.gz",
-        disk_size = huge_disk,
         gatk_path = gatk_path
     }
 
@@ -267,8 +251,29 @@ workflow JointGenotyping {
         dbsnp_vcf_index = dbsnp_vcf_index,
         interval_list = eval_interval_list,
         ref_dict = ref_dict,
-        disk_size = large_disk,
         gatk_path = gatk_path
+    }
+
+    call Moritsuke as small_moritsuke {
+      input:
+        callset_name = callset_name,
+        output_dir = output_dir,
+        vcf_name = FinalGatherVcf.output_vcf,
+        vcf_index_name = FinalGatherVcf.output_vcf_index,
+        detail_metrics_name = CollectMetricsOnFullVcf.detail_metrics_file,
+        summary_metrics_name = CollectMetricsOnFullVcf.summary_metrics_file,
+        output_intervals = DynamicallyCombineIntervals.output_intervals
+    }
+
+    output {
+      # outputs from the callset path through the wdl
+      small_moritsuke.output_vcf
+      small_moritsuke.output_vcf_index
+      small_moritsuke.detail_metrics_file
+      small_moritsuke.summary_metrics_file
+
+      # output the interval list generated/used by this run workflow
+      small_moritsuke.workflow_intervals
     }
   }
 
@@ -279,37 +284,30 @@ workflow JointGenotyping {
         input_details_fofn = select_all(CollectMetricsSharded.detail_metrics_file),
         input_summaries_fofn = select_all(CollectMetricsSharded.summary_metrics_file),
         output_prefix = callset_name,
-        disk_size = medium_disk,
         gatk_path = gatk_path
     }
-  }
 
-  call Moritsuke {
-    input:
-      callset_name = callset_name,
-      vcf_name = FinalGatherVcf.output_vcf,
-      vcf_index_name = FinalGatherVcf.output_vcf_index,
-      fullvcf_detail_metrics_name = CollectMetricsOnFullVcf.detail_metrics_file,
-      fullvcf_summary_metrics_name = CollectMetricsOnFullVcf.summary_metrics_file,
-      accumulate_detail_metrics_name = GatherMetrics.detail_metrics_file,
-      accumulate_summary_metrics_name = GatherMetrics.summary_metrics_file,
-      output_intervals = DynamicallyCombineIntervals.output_intervals
-  }
+    call Moritsuke as large_moritsuke {
+      input:
+        callset_name = callset_name,
+        output_dir = output_dir,
+        vcf_name = FinalGatherVcf.output_vcf,
+        vcf_index_name = FinalGatherVcf.output_vcf_index,
+        detail_metrics_name = GatherMetrics.detail_metrics_file,
+        summary_metrics_name = GatherMetrics.summary_metrics_file,
+        output_intervals = DynamicallyCombineIntervals.output_intervals
+    }
 
-  output {
-    # outputs from the small callset path through the wdl
-    Moritsuke.output_vcf
-    Moritsuke.output_vcf_index
-    Moritsuke.detail_metrics_file
-    Moritsuke.summary_metrics_file
+    output {
+      # outputs from the callset path through the wdl
+      large_moritsuke.output_vcf
+      large_moritsuke.output_vcf_index
+      large_moritsuke.detail_metrics_file
+      large_moritsuke.summary_metrics_file
 
-    # outputs from the large callset path through the wdl
-    # (note that we do not list ApplyRecalibration here because it is run in both paths)
-    Moritsuke.all_detail_metrics_file
-    Moritsuke.all_summary_metrics_file
-
-    # output the interval list generated/used by this run workflow
-    Moritsuke.workflow_intervals
+      # output the interval list generated/used by this run workflow
+      large_moritsuke.workflow_intervals
+    }
   }
 }
 
@@ -336,7 +334,6 @@ task ImportGVCFs {
   String workspace_dir_name
 
   String gatk_path
-  Int disk_size
   Int batch_size
 
   command <<<
@@ -376,7 +373,6 @@ task ImportGVCFs {
   runtime {
     memory: "7 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -398,7 +394,6 @@ task GenotypeGVCFs {
   File dbsnp_vcf_index
 
   String gatk_path
-  Int disk_size
 
   command <<<
     set -e
@@ -420,7 +415,6 @@ task GenotypeGVCFs {
   runtime {
     memory: "7 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -438,7 +432,6 @@ task HardFilterAndMakeSitesOnlyVcf {
   String sites_only_vcf_filename
   String gatk_path
 
-  Int disk_size
 
   command {
     set -e
@@ -459,7 +452,6 @@ task HardFilterAndMakeSitesOnlyVcf {
   runtime {
     memory: "3.5 GB"
     cpu: "1"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -488,7 +480,6 @@ task IndelsVariantRecalibrator {
   File dbsnp_resource_vcf_index
 
   String gatk_path
-  Int disk_size
 
   command {
     ${gatk_path} --java-options "-Xmx24g -Xms24g" \
@@ -508,7 +499,6 @@ task IndelsVariantRecalibrator {
   runtime {
     memory: "26 GB"
     cpu: "5"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -540,7 +530,6 @@ task SNPsVariantRecalibratorCreateModel {
   File dbsnp_resource_vcf_index
 
   String gatk_path
-  Int disk_size
 
   command {
     ${gatk_path} --java-options "-Xmx100g -Xms100g" \
@@ -563,7 +552,6 @@ task SNPsVariantRecalibratorCreateModel {
   runtime {
     memory: "104 GB"
     cpu: "20"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -592,7 +580,6 @@ task SNPsVariantRecalibrator {
   File dbsnp_resource_vcf_index
 
   String gatk_path
-  Int disk_size
 
   command {
     ${gatk_path} --java-options "-Xmx3g -Xms3g" \
@@ -614,7 +601,6 @@ task SNPsVariantRecalibrator {
   runtime {
     memory: "3.5 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -630,7 +616,6 @@ task GatherTranches {
 
   String gatk_path
 
-  Int disk_size
 
   command <<<
     set -e
@@ -644,7 +629,6 @@ task GatherTranches {
   runtime {
     memory: "7 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -667,7 +651,6 @@ task ApplyRecalibration {
   Float snp_filter_level
 
   String gatk_path
-  Int disk_size
 
   command {
     set -e
@@ -695,7 +678,6 @@ task ApplyRecalibration {
   runtime {
     memory: "7 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -710,7 +692,6 @@ task GatherVcfs {
   String output_vcf_name
   
   String gatk_path
-  Int disk_size
 
   command <<<
     set -e
@@ -731,7 +712,6 @@ task GatherVcfs {
   runtime {
     memory: "7 GB"
     cpu: "2"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -751,7 +731,6 @@ task CollectVariantCallingMetrics {
   File ref_dict
 
   String gatk_path
-  Int disk_size
 
   command {
     ${gatk_path} --java-options "-Xmx6g -Xms6g" \
@@ -770,7 +749,6 @@ task CollectVariantCallingMetrics {
   runtime {
     memory: "7 GB"
     cpu: 2
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
 }
@@ -782,7 +760,6 @@ task GatherMetrics {
   String output_prefix
 
   String gatk_path
-  Int disk_size
 
   command <<<
     set -e
@@ -797,7 +774,6 @@ task GatherMetrics {
   runtime {
     memory: "3 GB"
     cpu: "1"
-    disks: "local-disk " + disk_size + " HDD"
     preemptible: 5
   }
   output {
@@ -872,40 +848,33 @@ task DynamicallyCombineIntervals {
 
 task Moritsuke {
   String callset_name
+  String output_dir
   File vcf_name
   File vcf_index_name
-  File fullvcf_detail_metrics_name
-  File fullvcf_summary_metrics_name
-  File accumulate_detail_metrics_name
-  File accumulate_summary_metrics_name
+  File detail_metrics_name
+  File summary_metrics_name
   File output_intervals
 
   String basename_vcf_name = basename(vcf_name)
   String basename_vcf_index_name = basename(vcf_index_name)
-  String basename_fullvcf_detail_metrics_name = basename(fullvcf_detail_metrics_name)
-  String basename_fullvcf_summary_metrics_name = basename(fullvcf_summary_metrics_name)
-  String basename_accumulate_detail_metrics_name = basename(accumulate_detail_metrics_name)
-  String basename_accumulate_summary_metrics_name = basename(accumulate_summary_metrics_name)
+  String basename_detail_metrics_name = basename(detail_metrics_name)
+  String basename_summary_metrics_name = basename(summary_metrics_name)
   String basename_output_intervals = basename(output_intervals)
 
   command {
-    mkdir -p ${callset_name}
-    mv ${vcf_name} ${callset_name}/${basename_vcf_name} 
-    mv ${vcf_index_name} ${callset_name}/${basename_vcf_index_name}
-    mv ${fullvcf_detail_metrics_name} ${callset_name}/${basename_fullvcf_detail_metrics_name}
-    mv ${fullvcf_summary_metrics_name} ${callset_name}/${basename_fullvcf_summary_metrics_name}
-    mv ${accumulate_detail_metrics_name} ${callset_name}/${basename_accumulate_detail_metrics_name}
-    mv ${accumulate_summary_metrics_name} ${callset_name}/${basename_accumulate_summary_metrics_name}
-    mv ${output_intervals} ${callset_name}/${basename_output_intervals}
+    mkdir -p ${output_dir}
+    mv ${vcf_name} ${output_dir}/${basename_vcf_name} 
+    mv ${vcf_index_name} ${output_dir}/${basename_vcf_index_name}
+    mv ${detail_metrics_name} ${output_dir}/${basename_detail_metrics_name}
+    mv ${summary_metrics_name} ${output_dir}/${basename_summary_metrics_name}
+    mv ${output_intervals} ${output_dir}/${basename_output_intervals}
   }
 
   output {
-    File output_vcf = "${callset_name}/${basename_vcf_name}"
-    File output_vcf_index = "${callset_name}/${basename_vcf_index_name}"
-    File detail_metrics_file = "${callset_name}/${basename_fullvcf_detail_metrics_name}"
-    File summary_metrics_file = "${callset_name}/${basename_fullvcf_summary_metrics_name}"
-    File all_detail_metrics_file = "${callset_name}/${basename_accumulate_detail_metrics_name}"
-    File all_summary_metrics_file = "${callset_name}/${basename_accumulate_summary_metrics_name}"
-    File workflow_intervals = "${callset_name}/${basename_output_intervals}"
+    File output_vcf = "${output_dir}/${basename_vcf_name}"
+    File output_vcf_index = "${output_dir}/${basename_vcf_index_name}"
+    File detail_metrics_file = "${output_dir}/${basename_detail_metrics_name}"
+    File summary_metrics_file = "${output_dir}/${basename_summary_metrics_name}"
+    File workflow_intervals = "${output_dir}/${basename_output_intervals}"
   }
 }
