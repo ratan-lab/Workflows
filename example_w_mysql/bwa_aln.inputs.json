@@ -1,0 +1,15 @@
+{
+  "bwa_mem.sample_name": "NA12878",
+
+  "bwa_mem.align.r1fastq": "/project/genomes/Homo_sapiens/GATK_bundle/data/NA12878_R1.2.fastq",
+  "bwa_mem.align.r2fastq": "/project/genomes/Homo_sapiens/GATK_bundle/data/NA12878_R2.2.fastq",
+
+  "bwa_mem.align.ref_fasta": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa",
+  "bwa_mem.align.ref_fasta_bwt": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa.bwt",
+  "bwa_mem.align.ref_fasta_ann": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa.ann",
+  "bwa_mem.align.ref_fasta_sa": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa.sa",
+  "bwa_mem.align.ref_fasta_amb": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa.amb",
+  "bwa_mem.align.ref_fasta_pac": "/project/genomes/Homo_sapiens/GATK_bundle/hg38/BWAIndex/hg38.fa.pac",
+
+  "bwa_mem.align.threads": 20
+}

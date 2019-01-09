@@ -1,0 +1,8 @@
+{
+	"write_to_cache": true,
+	"read_from_cache": true,
+	"final_workflow_log_dir": "/scratch/hp7d/wdl_tutorial_2/wf_logs",
+	"final_call_logs_dir": "/scratch/hp7d/wdl_tutorial_2/call_logs",
+	"final_workflow_outputs_dir": "/scratch/hp7d/wdl_tutorial_2/wf_outputs",
+	"workflow_failure_mode": "ContinueWhilePossible"
+}
