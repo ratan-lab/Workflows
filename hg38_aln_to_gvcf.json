@@ -7,7 +7,6 @@
 
   "##_COMMENT2": "TOOLS OPTIONS",
   "HaplotypeCaller_sl.gatk_path": "String",
-  "HaplotypeCaller_sl.HaplotypeCaller.java_options": "String? (optional)",
   "HaplotypeCaller_sl.scattered_calling_intervals_list": "File",
 
   "##_COMMENT3": "REFERENCE OPTIONS",
