@@ -1,0 +1,13 @@
+{
+  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX, OUTDIR",
+  "HaplotypeCaller_ml.inputs": "File",
+
+  "##_COMMENT2": "TOOLS OPTIONS",
+  "HaplotypeCaller_ml.gatk_path": "String",
+  "HaplotypeCaller_ml.scattered_calling_intervals_list": "File",
+
+  "##_COMMENT3": "REFERENCE OPTIONS",  
+  "HaplotypeCaller_ml.ref_fasta": "File",
+  "HaplotypeCaller_ml.ref_fasta_index": "File",
+  "HaplotypeCaller_ml.ref_dict": "File"
+}
