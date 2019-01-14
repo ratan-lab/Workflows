@@ -11,6 +11,7 @@ workflow HaplotypeCaller_sl {
 
   Array[File] scattered_calling_intervals = read_lines(scattered_calling_intervals_list)
 
+  String samtools_path
   String gatk_path
 
   #is the input a cram file?
@@ -26,6 +27,7 @@ workflow HaplotypeCaller_sl {
             sample_name = sample_name,
             ref_dict = ref_dict,
             ref_fasta = ref_fasta,
+            samtools_path = samtools_path,
             ref_fasta_index = ref_fasta_index,
     }
   }
@@ -79,15 +81,15 @@ task CramToBamTask {
   File ref_dict
   File input_cram
   String sample_name
-
+  String samtools_path
 
   command {
     set -e
     set -o pipefail
 
-    samtools view -h -T ${ref_fasta} ${input_cram} |
-    samtools view -b -o ${sample_name}.bam -
-    samtools index -b ${sample_name}.bam
+    ${samtools_path} view -h -T ${ref_fasta} ${input_cram} |
+    ${samtools_path} view -b -o ${sample_name}.bam -
+    ${samtools_path} index -b ${sample_name}.bam
     mv ${sample_name}.bam.bai ${sample_name}.bai
   }
 

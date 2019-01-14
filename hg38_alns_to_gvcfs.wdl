@@ -8,6 +8,7 @@ workflow HaplotypeCaller_ml {
     File ref_fasta_index
     File scattered_calling_intervals_list
     String gatk_path
+    String samtools_path
 
     Array[Array[File]] samples = read_tsv(inputs)
 
@@ -23,6 +24,7 @@ workflow HaplotypeCaller_ml {
                 ref_fasta_index = ref_fasta_index,
                 scattered_calling_intervals_list = scattered_calling_intervals_list,
                 gatk_path = gatk_path,
+                samtools_path = samtools_path,
         }
     }
 }

@@ -4,6 +4,7 @@
 
   "##_COMMENT2": "TOOLS OPTIONS",
   "HaplotypeCaller_ml.gatk_path": "String",
+  "HaplotypeCaller_ml.samtools_path": "String",
   "HaplotypeCaller_ml.scattered_calling_intervals_list": "File",
 
   "##_COMMENT3": "REFERENCE OPTIONS",  
