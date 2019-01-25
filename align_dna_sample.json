@@ -21,6 +21,5 @@
   "align_dna.reference": "String",
   "align_dna.mark_dups": "Boolean? (optional)",
   "align_dna.tmp_dir": "String",
-  "align_dna.out_dir": "String",
   "align_dna.out_prefix": "String? (optional)"
 }

@@ -1,0 +1,19 @@
+{
+  "##COMMENT1": "SAMPLES INFORMATION",
+  "AlignSamples.inputs": "File",
+
+  "##COMMENT2": "TOOLS",
+  "AlignSamples.bwa": "String",
+  "AlignSamples.num_threads": "Int? (optional)",
+  "AlignSamples.bwa_options": "String? (optional)",
+  "AlignSamples.samblaster": "String",
+  "AlignSamples.mark_dups": "Boolean? (optional)",
+  "AlignSamples.sambamba": "String",
+  "AlignSamples.mem_sambamba": "Int? (optional)",
+  "AlignSamples.samtools": "String",
+
+  "##COMMENT3": "OUTPUT AND PIPELINE OPTIONS",
+  "AlignSamples.reference": "String",
+  "AlignSamples.tmp_dir": "String"
+}
+
