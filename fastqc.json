@@ -11,5 +11,5 @@
   "fastqc.multiqc": "String",
 
   "##_COMMENT3": "OUTPUT",
-  "fastqc.out_dir": "String"
+  "fastqc.final_out_dir": "String"
 }
