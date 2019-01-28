@@ -2,7 +2,7 @@ workflow JointGenotyping {
   File unpadded_intervals_file
 
   String callset_name
-  String output_dir
+  String final_out_dir
 
   File ref_fasta
   File ref_fasta_index
@@ -254,26 +254,10 @@ workflow JointGenotyping {
         gatk_path = gatk_path
     }
 
-    call Moritsuke as small_moritsuke {
+    call copy as cp_small {
       input:
-        callset_name = callset_name,
-        output_dir = output_dir,
-        vcf_name = FinalGatherVcf.output_vcf,
-        vcf_index_name = FinalGatherVcf.output_vcf_index,
-        detail_metrics_name = CollectMetricsOnFullVcf.detail_metrics_file,
-        summary_metrics_name = CollectMetricsOnFullVcf.summary_metrics_file,
-        output_intervals = DynamicallyCombineIntervals.output_intervals
-    }
-
-    output {
-      # outputs from the callset path through the wdl
-      small_moritsuke.output_vcf
-      small_moritsuke.output_vcf_index
-      small_moritsuke.detail_metrics_file
-      small_moritsuke.summary_metrics_file
-
-      # output the interval list generated/used by this run workflow
-      small_moritsuke.workflow_intervals
+        files = [FinalGatherVcf.output_vcf, FinalGatherVcf.output_vcf_index, CollectMetricsOnFullVcf.detail_metrics_file, CollectMetricsOnFullVcf.summary_metrics_file, DynamicallyCombineIntervals.output_intervals],
+        destination = final_out_dir
     }
   }
 
@@ -287,26 +271,10 @@ workflow JointGenotyping {
         gatk_path = gatk_path
     }
 
-    call Moritsuke as large_moritsuke {
+    call copy as cp_large {
       input:
-        callset_name = callset_name,
-        output_dir = output_dir,
-        vcf_name = FinalGatherVcf.output_vcf,
-        vcf_index_name = FinalGatherVcf.output_vcf_index,
-        detail_metrics_name = GatherMetrics.detail_metrics_file,
-        summary_metrics_name = GatherMetrics.summary_metrics_file,
-        output_intervals = DynamicallyCombineIntervals.output_intervals
-    }
-
-    output {
-      # outputs from the callset path through the wdl
-      large_moritsuke.output_vcf
-      large_moritsuke.output_vcf_index
-      large_moritsuke.detail_metrics_file
-      large_moritsuke.summary_metrics_file
-
-      # output the interval list generated/used by this run workflow
-      large_moritsuke.workflow_intervals
+        files = [FinalGatherVcf.output_vcf, FinalGatherVcf.output_vcf_index, GatherMetrics.detail_metrics_file, GatherMetrics.summary_metrics_file, DynamicallyCombineIntervals.output_intervals],
+        destination = final_out_dir
     }
   }
 }
@@ -846,35 +814,16 @@ task DynamicallyCombineIntervals {
   }
 }
 
-task Moritsuke {
-  String callset_name
-  String output_dir
-  File vcf_name
-  File vcf_index_name
-  File detail_metrics_name
-  File summary_metrics_name
-  File output_intervals
-
-  String basename_vcf_name = basename(vcf_name)
-  String basename_vcf_index_name = basename(vcf_index_name)
-  String basename_detail_metrics_name = basename(detail_metrics_name)
-  String basename_summary_metrics_name = basename(summary_metrics_name)
-  String basename_output_intervals = basename(output_intervals)
+task copy {
+  Array[File] files
+  String destination
 
   command {
-    mkdir -p ${output_dir}
-    mv ${vcf_name} ${output_dir}/${basename_vcf_name} 
-    mv ${vcf_index_name} ${output_dir}/${basename_vcf_index_name}
-    mv ${detail_metrics_name} ${output_dir}/${basename_detail_metrics_name}
-    mv ${summary_metrics_name} ${output_dir}/${basename_summary_metrics_name}
-    mv ${output_intervals} ${output_dir}/${basename_output_intervals}
+    mkdir -p ${destination}
+    cp -L -R -u ${sep=' ' files} ${destination}
   }
 
   output {
-    File output_vcf = "${output_dir}/${basename_vcf_name}"
-    File output_vcf_index = "${output_dir}/${basename_vcf_index_name}"
-    File detail_metrics_file = "${output_dir}/${basename_detail_metrics_name}"
-    File summary_metrics_file = "${output_dir}/${basename_summary_metrics_name}"
-    File workflow_intervals = "${output_dir}/${basename_output_intervals}"
+    Array[File] out = files
   }
 }

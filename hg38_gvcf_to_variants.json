@@ -4,7 +4,7 @@
   "JointGenotyping.sample_names": "Array[String]",
   "JointGenotyping.input_gvcfs": "Array[File]",
   "JointGenotyping.input_gvcfs_indices": "Array[File]",
-  "JointGenotyping.output_dir": "String",
+  "JointGenotyping.final_out_dir": "String",
 
   "##COMMENT2": "REFERENCE FILES",
   "JointGenotyping.ref_fasta": "File",
