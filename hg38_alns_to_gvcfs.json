@@ -1,5 +1,5 @@
 {
-  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX, OUTDIR",
+  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX",
   "HaplotypeCaller_ml.inputs": "File",
 
   "##_COMMENT2": "TOOLS OPTIONS",
@@ -10,5 +10,8 @@
   "##_COMMENT3": "REFERENCE OPTIONS",  
   "HaplotypeCaller_ml.ref_fasta": "File",
   "HaplotypeCaller_ml.ref_fasta_index": "File",
-  "HaplotypeCaller_ml.ref_dict": "File"
+  "HaplotypeCaller_ml.ref_dict": "File",
+
+  "##COMMENT4": "OUTPUT",
+  "HaplotypeCaller_ml.final_out_dir": "File"
 }
