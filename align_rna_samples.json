@@ -1,0 +1,15 @@
+{
+  "## COMMENT1": "TOOLS",
+  "AlignSamples.star": "String",
+  "AlignSamples.sambamba": "String",
+
+  "## COMMENT2": "OPTIONS",
+  "AlignSamples.reference": "String",
+  "AlignSamples.threads": "Int",
+
+  "## COMMENT3": "INPUT/OUTPUT",
+  "## COMMENT4": "expected sample fq mq readgroups",
+  "AlignSamples.inputs": "File",
+  "AlignSamples.final_out_dir": "String"
+}
+

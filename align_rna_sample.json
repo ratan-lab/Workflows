@@ -1,0 +1,17 @@
+{
+  "## COMMENT1": "TOOLS",
+  "align_rna.star": "String",
+  "align_rna.sambamba": "String",
+  "align_rna.reference": "String",
+  "align_rna.threads": "Int",
+
+  "## COMMENT2": "INPUT FILES",
+  "align_rna.sample": "String",
+  "align_rna.mq": "String",
+  "align_rna.fq": "String",
+  "align_rna.read_group": "String",
+
+  "## COMMENT3": "OUTPUT OPTIONS",
+  "align_rna.out_dir": "String"
+}
+
