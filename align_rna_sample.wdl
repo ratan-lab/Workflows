@@ -5,9 +5,7 @@ workflow align_rna {
   String read_group
   String fq
   String mq
-
   String sambamba
- 
   String out_dir
   Int threads
 

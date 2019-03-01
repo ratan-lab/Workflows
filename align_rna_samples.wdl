@@ -7,6 +7,8 @@ workflow AlignSamples {
   String sambamba
   String final_out_dir
   Int threads
+  String featurecounts
+  File gtffile
 
   Array[Array[File]] samples = read_tsv(inputs)
 
@@ -29,6 +31,29 @@ workflow AlignSamples {
         files = [align_rna.alignments, align_rna.logfile],
         destination = final_out_dir
     }
+  }
+
+  call quantify_genes {
+    input:
+      inputdir = destination,
+      featurecounts = featurecounts,
+      threads = threads,
+      gtffile = gtffile
+  }
+}
+
+task quantify_genes {
+  String inputdir
+  String featurecounts
+  File gtffile
+  Int threads
+
+  command {
+    ${featurecounts} -a ${annotation} -o ${inputdir}/counts.txt -p -T ${threads}  -t exon -g gene_id ${inputdir}/*.bam
+  }
+
+  output {
+    File countfile = ${inputdir}/counts.txt
   }
 }
 
