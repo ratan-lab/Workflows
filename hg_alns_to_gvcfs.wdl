@@ -1,4 +1,4 @@
-import "hg38_aln_to_gvcf.wdl" as sl
+import "hg_aln_to_gvcf.wdl" as sl
 
 workflow HaplotypeCaller_ml {
   File inputs
