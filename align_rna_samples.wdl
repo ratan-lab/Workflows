@@ -35,7 +35,8 @@ workflow AlignSamples {
 
   call quantify_genes {
     input:
-      inputdir = final_out_dir,
+      inputfiles = align_rna.alignments,
+      outdir = final_out_dir,
       featurecounts = featurecounts,
       threads = threads,
       gtffile = gtffile
@@ -43,17 +44,19 @@ workflow AlignSamples {
 }
 
 task quantify_genes {
-  String inputdir
+  Array[File] inputfiles
+  String outdir
   String featurecounts
   File gtffile
   Int threads
 
   command {
-    ${featurecounts} -a ${gtffile} -o ${inputdir}/counts.txt -p -T ${threads}  -t exon -g gene_id ${inputdir}/*.bam
+    mkdir -p outdir
+    ${featurecounts} -a ${gtffile} -o ${outdir}/counts.txt -p -T ${threads} -t exon -g gene_id ${sep=' ' inputfiles}
   }
 
   output {
-    File countfile = "${inputdir}/counts.txt"
+    File countfile = "${outdir}/counts.txt"
   }
 }
 
