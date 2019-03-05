@@ -35,7 +35,7 @@ workflow AlignSamples {
 
   call quantify_genes {
     input:
-      inputdir = destination,
+      inputdir = final_out_dir,
       featurecounts = featurecounts,
       threads = threads,
       gtffile = gtffile
@@ -49,11 +49,11 @@ task quantify_genes {
   Int threads
 
   command {
-    ${featurecounts} -a ${annotation} -o ${inputdir}/counts.txt -p -T ${threads}  -t exon -g gene_id ${inputdir}/*.bam
+    ${featurecounts} -a ${gtffile} -o ${inputdir}/counts.txt -p -T ${threads}  -t exon -g gene_id ${inputdir}/*.bam
   }
 
   output {
-    File countfile = ${inputdir}/counts.txt
+    File countfile = "${inputdir}/counts.txt"
   }
 }
 

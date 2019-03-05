@@ -2,10 +2,12 @@
   "## COMMENT1": "TOOLS",
   "AlignSamples.star": "String",
   "AlignSamples.sambamba": "String",
+  "AlignSamples.featurecounts": "String",
 
   "## COMMENT2": "OPTIONS",
   "AlignSamples.reference": "String",
   "AlignSamples.threads": "Int",
+  "AlignSamples.gtffile": "File",
 
   "## COMMENT3": "INPUT/OUTPUT",
   "## COMMENT4": "expected sample fq mq readgroups",
