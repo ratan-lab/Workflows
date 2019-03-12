@@ -27,12 +27,12 @@ workflow HaplotypeCaller_ml {
               gatk_path = gatk_path,
               samtools_path = samtools_path,
       }
-  }
 
-  call copy {
-    input:    
-      files = [HaplotypeCaller_sl.output_vcf, HaplotypeCaller_sl.output_vcf_index],
-      destination = final_out_dir
+    call copy {
+      input:    
+        files = [HaplotypeCaller_sl.output_vcf, HaplotypeCaller_sl.output_vcf_index],
+        destination = final_out_dir
+    }
   }
 }
 
