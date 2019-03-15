@@ -14,25 +14,25 @@ workflow HaplotypeCaller_ml {
   Array[Array[File]] samples = read_tsv(inputs)
 
   scatter (sample in samples) {
-      call sl.HaplotypeCaller_sl {
-          input: 
-              sample_name = sample[0],
-              input_bam = sample[1],
-              input_bam_index = sample[2],
-              output_dir = sample[0],
-              ref_dict = ref_dict,
-              ref_fasta = ref_fasta,
-              ref_fasta_index = ref_fasta_index,
-              scattered_calling_intervals_list = scattered_calling_intervals_list,
-              gatk_path = gatk_path,
-              samtools_path = samtools_path,
-      }
-  }
+    call sl.HaplotypeCaller_sl {
+      input: 
+        sample_name = sample[0],
+        input_bam = sample[1],
+        input_bam_index = sample[2],
+        output_dir = sample[0],
+        ref_dict = ref_dict,
+        ref_fasta = ref_fasta,
+        ref_fasta_index = ref_fasta_index,
+        scattered_calling_intervals_list = scattered_calling_intervals_list,
+        gatk_path = gatk_path,
+        samtools_path = samtools_path,
+    }
 
-  call copy {
-    input:    
-      files = [HaplotypeCaller_sl.output_vcf, HaplotypeCaller_sl.output_vcf_index],
-      destination = final_out_dir
+    call copy {
+      input:    
+        files = [HaplotypeCaller_sl.output_vcf, HaplotypeCaller_sl.output_vcf_index],
+        destination = final_out_dir
+    }
   }
 }
 
