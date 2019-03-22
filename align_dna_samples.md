@@ -1,4 +1,4 @@
-This recipe should be used to align Illumina short reads to a reference genome in FASTA format. We use 'BWA mem' to generate sorted alignments. The discordant pairs, split reads and the unmapped sequences are also generated as output. By default the putative PCR duplicates are flagged as well. 
+This recipe should be used to align Illumina short reads from DNA sequencing experiments (WGS, Amplicon sequencing, Exome-capture,...) to a reference genome in FASTA format. We use 'BWA mem' to generate sorted alignments. The discordant pairs, split reads and the unmapped sequences are also generated as output. By default the putative PCR duplicates are flagged as well. 
 
 Required Tools:
 * BWA
