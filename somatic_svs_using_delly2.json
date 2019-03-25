@@ -1,0 +1,20 @@
+{
+  "##_COMMENT1": "INPUT INFO",
+  "call_delly_svs.samples": "File",
+  "call_delly_svs.tumor_bam": "File",
+  "call_delly_svs.tumor_bam_index": "File",
+  "call_delly_svs.normal_bam": "File",
+  "call_delly_svs.normal_bam_index": "File",
+  "call_delly_svs.all_normal_bams": "Array[File]",
+  "call_delly_svs.all_normal_bams_index": "Array[File]",
+
+  "##_COMMENT2": "OUTPUT INFO",
+  "call_delly_svs.prefix": "String",
+  "call_delly_svs.final_out_dir": "String",
+
+  "##_COMMENT3": "DELLY INFO",
+  "call_delly_svs.delly": "File",
+  "call_delly_svs.exclude": "File",
+  "call_delly_svs.reference": "File"
+}
+
