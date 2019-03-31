@@ -85,11 +85,6 @@ task CramToBamTask {
     mv ${sample_name}.bam.bai ${sample_name}.bai
   }
 
-  runtime {
-    memory: "10 GB"
-    cpu: "2"
-  }
-
   output {
     File output_bam = "${sample_name}.bam"
     File output_bai = "${sample_name}.bai"
@@ -111,7 +106,7 @@ task HaplotypeCaller {
   String java_opt = select_first([java_options, "-XX:GCTimeLimit=50 -XX:GCHeapFreeLimit=10"])
 
   # Runtime parameters
-  Int machine_mem_gb = 6
+  Int machine_mem_gb = 4
   Int command_mem_gb = machine_mem_gb - 1
 
   command <<<
@@ -125,10 +120,6 @@ task HaplotypeCaller {
       -O ${output_filename} \
       -ERC GVCF
   >>>
-
-  runtime {
-    memory: machine_mem_gb + " GB"
-  }
 
   output {
     File output_vcf = "${output_filename}"
@@ -145,7 +136,7 @@ task MergeGVCFs {
   String gatk_path
 
   # Runtime parameters
-  Int machine_mem_gb = 6
+  Int machine_mem_gb = 4
   Int command_mem_gb = machine_mem_gb - 1
 
   command <<<
@@ -156,10 +147,6 @@ task MergeGVCFs {
       --INPUT ${sep=' --INPUT ' input_vcfs} \
       --OUTPUT ${output_filename}
   >>>
-
-  runtime {
-    memory: machine_mem_gb + " GB"
-  }
 
   output {
     File output_vcf = "${output_filename}"
