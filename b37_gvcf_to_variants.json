@@ -1,0 +1,42 @@
+{
+  "##COMMENT1": "DATASET SPECIFIC",
+  "JointGenotyping.callset_name": "String",
+  "JointGenotyping.sample_names": "Array[String]",
+  "JointGenotyping.input_gvcfs": "Array[File]",
+  "JointGenotyping.input_gvcfs_indices": "Array[File]",
+  "JointGenotyping.final_out_dir": "String",
+
+  "##COMMENT2": "REFERENCE FILES",
+  "JointGenotyping.ref_fasta": "File",
+  "JointGenotyping.ref_dict": "File",
+  "JointGenotyping.ref_fasta_index": "File",
+
+  "##COMMENT3": "INTERVALS",
+  "JointGenotyping.unpadded_intervals_file": "File",
+  "JointGenotyping.eval_interval_list": "File",
+
+  "##COMMENT4": "RESOURCE FILES",
+  "JointGenotyping.omni_resource_vcf": "File",
+  "JointGenotyping.omni_resource_vcf_index": "File",
+  "JointGenotyping.one_thousand_genomes_resource_vcf": "File",
+  "JointGenotyping.one_thousand_genomes_resource_vcf_index": "File",
+  "JointGenotyping.mills_resource_vcf": "File",
+  "JointGenotyping.mills_resource_vcf_index": "File",
+  "JointGenotyping.hapmap_resource_vcf": "File",
+  "JointGenotyping.hapmap_resource_vcf_index": "File",
+  "JointGenotyping.dbsnp_vcf": "File",
+  "JointGenotyping.dbsnp_vcf_index": "File",
+
+  "##COMMENT5": "VQSR PARAMETERS",
+  "JointGenotyping.SNP_VQSR_downsampleFactor": "Int",
+  "JointGenotyping.snp_filter_level": "Float",
+  "JointGenotyping.snp_recalibration_tranche_values": "Array[String]",
+  "JointGenotyping.snp_recalibration_annotation_values": "Array[String]",
+  "JointGenotyping.indel_filter_level": "Float",
+  "JointGenotyping.indel_recalibration_tranche_values": "Array[String]",
+  "JointGenotyping.indel_recalibration_annotation_values": "Array[String]",
+
+  "##COMMENT6": "PATHS",
+  "JointGenotyping.gatk_path": "String"
+}
+
