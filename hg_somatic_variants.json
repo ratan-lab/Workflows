@@ -1,0 +1,17 @@
+{
+  "##_COMMENT1": "SAMPLE INFO",
+  "CallSomatic.inputs": "File",
+
+  "##_COMMENT2": "TOOLS AND RESOURCES",
+  "CallSomatic.ref_fasta": "File",
+  "CallSomatic.ref_fasta_index": "File",
+  "CallSomatic.ref_fasta_dict": "File",
+  "CallSomatic.gnomad": "File",
+  "CallSomatic.gnomad_index": "File",
+  "CallSomatic.ponvcf": "File",
+  "CallSomatic.ponvcf_index": "File",
+  "CallSomatic.unpadded_intervals_file": "File",
+  "CallSomatic.gatk_path": "String",
+  "CallSomatic.scattered_calling_intervals_list": "File"
+}
+
