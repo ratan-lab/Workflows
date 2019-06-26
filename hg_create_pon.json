@@ -1,0 +1,13 @@
+{
+  "##_COMMENT1": "SAMPLE INFO",
+  "CreatePON.inputs": "File",
+
+  "##_COMMENT2": "TOOLS AND RESOURCES",
+  "CreatePON.gatk_path": "String",
+  "CreatePON.ref_fasta": "String",
+  "CreatePON.ref_fasta_index": "String",
+  "CreatePON.ref_fasta_dict": "String",
+  "CreatePON.scattered_calling_intervals_list": "String",
+  "CreatePON.unpadded_intervals_file": "String"
+}
+
