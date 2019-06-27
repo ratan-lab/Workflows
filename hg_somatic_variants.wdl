@@ -10,7 +10,6 @@ workflow CallSomatic {
   File ponvcf
   File ponvcf_index
   File scattered_calling_intervals_list
-  File unpadded_intervals_file
 
   String gatk_path
 
