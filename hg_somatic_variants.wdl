@@ -33,10 +33,45 @@ workflow CallSomatic {
         gatk_path = gatk_path,
         scattered_calling_intervals_list = scattered_calling_intervals_list
     }
+
+    call FilterCalls {
+      input:
+        vcf = CallSomaticSl.output_vcf,
+        vcf_index = CallSomaticSl.output_vcf_index,
+        vcf_stats = CallSomaticSl.output_stats,
+        model = CallSomaticSl.output_model,
+        ref_fasta = ref_fasta,
+        ref_fasta_index = ref_fasta_index,
+        ref_fasta_dict = ref_fasta_dict,
+        gatk_path = gatk_path
+    }
   }
 
   output {
-    Array[File] output_vcfs = CallSomaticSl.output_vcf
-    Array[File] output_vcfs_indexes = CallSomaticSl.output_vcf_index
+    Array[File] output_vcfs = FilterCalls.output_vcf
+    Array[File] output_vcfs_indexes = FilterCalls.output_vcf_index
+  }
+}
+
+task FilterCalls {
+  File vcf
+  File vcf_index
+  File vcf_stats
+  File ref_fasta
+  File ref_fasta_index
+  File ref_fasta_dict
+  File gatk_path
+  File model
+
+  String output_file = basename(vcf, ".vcf.gz") + ".filtered.vcf.gz"
+
+  command <<<
+    ${gatk_path} FilterMutectCalls \
+        -R ${ref_fasta} -V ${vcf} --ob-priors ${model} -O ${output_file}
+  >>>   
+
+  output {
+    File output_vcf = "${output_file}"
+    File output_vcf_index = "${output_file}.tbi"
   }
 }

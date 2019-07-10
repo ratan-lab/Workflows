@@ -40,6 +40,8 @@ workflow CallSomaticSl {
     input: 
       input_vcfs = Mutect.output_vcf,
       input_vcfs_indexes = Mutect.output_vcf_index,
+      input_stats = Mutect.output_stats,
+      input_model = Mutect.model,
       gatk_path = gatk_path,
       sample = sample    
   }
@@ -47,6 +49,8 @@ workflow CallSomaticSl {
   output {
     File output_vcf = MergeVCFs.output_vcf
     File output_vcf_index = MergeVCFs.output_vcf_index
+    File output_stats = MergeVCFs.output_stats
+    File output_model = MergeVCFs.output_model
   }
 }
 
@@ -78,6 +82,7 @@ task Mutect {
       -normal ${sample} \
       --germline-resource ${gnomad} \
       --panel-of-normals ${ponvcf} \
+      --f1r2-tar-gz f1r2.tar.gz \
       -L ${interval_file} \
       -O ${sample}.vcf.gz
   >>>
@@ -85,15 +90,18 @@ task Mutect {
   output {
     File output_vcf = "${sample}.vcf.gz"
     File output_vcf_index = "${sample}.vcf.gz.tbi"
+    File output_stats = "${sample}.vcf.gz.stats"
+    File model = "f1r2.tar.gz"
   }
 }
 
 task MergeVCFs {
   Array[File] input_vcfs
   Array[File] input_vcfs_indexes
+  Array[File] input_stats
+  Array[File] input_model
   String sample
   String gatk_path
-  String output_filename = "${sample}.vcf.gz"
 
   command <<<
   set -e
@@ -101,11 +109,23 @@ task MergeVCFs {
     ${gatk_path} --java-options "-Xmx4g"  \
       MergeVcfs \
       --INPUT ${sep=' --INPUT ' input_vcfs} \
-      --OUTPUT ${output_filename}
+      --OUTPUT ${sample}.vcf.gz
+
+    ${gatk_path} --java-options "-Xmx4g" \
+        MergeMutectStats \
+        -stats ${sep=' -stats ' input_stats} \
+        -O ${sample}.vcf.gz.stats
+
+    ${gatk_path} --java-options "-Xmx4g" \
+        LearnReadOrientationModel \
+        -I ${sep=' -I ' input_model} \
+        -O read-orientation-model.tar.gz
   >>>
 
   output {
-    File output_vcf = "${output_filename}"
-    File output_vcf_index = "${output_filename}.tbi"
+    File output_vcf = "${sample}.vcf.gz"
+    File output_vcf_index = "${sample}.vcf.gz.tbi"
+    File output_stats = "${sample}.vcf.gz.stats"
+    File output_model = "read-orientation-model.tar.gz"
   }
-}   
+} 

@@ -7,7 +7,6 @@ workflow CreatePON {
   File ref_fasta_dict
   File ref_fasta_index
   File scattered_calling_intervals_list
-  File unpadded_intervals_file
 
   String gatk_path
 
@@ -27,10 +26,10 @@ workflow CreatePON {
     }
   }
 
-  Array[String] unpadded_intervals = read_lines(unpadded_intervals_file)
+  Array[File] interval_list = read_lines(scattered_calling_intervals_list)
 
 
-  scatter (interval in unpadded_intervals) {
+  scatter (interval_file in interval_list) {
      call CreatePanel {
        input:
         input_vcfs = CreateSlPON.output_vcf,
@@ -39,7 +38,7 @@ workflow CreatePON {
         ref_fasta_index = ref_fasta_index,
         ref_fasta_dict = ref_fasta_dict,
         gatk_path = gatk_path,
-        interval = interval
+        interval = interval_file
     }
   }
   
@@ -62,7 +61,7 @@ task CreatePanel {
   File ref_fasta_index
   File ref_fasta_dict
   String gatk_path
-  String interval
+  File interval
 
   command <<<
     set -e
