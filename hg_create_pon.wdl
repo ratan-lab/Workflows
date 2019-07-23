@@ -79,6 +79,7 @@ task CreatePanel {
 
     ${gatk_path} --java-options "-Xmx4g" CreateSomaticPanelOfNormals \
       -R ${ref_fasta} -V gendb://pon_db \
+      -L ${interval} \
       -O pon.vcf.gz
   >>>
 
