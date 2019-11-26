@@ -62,7 +62,28 @@ task Mutect {
       -tumor ${sample} \
       -L ${interval_file} \
       --max-mnp-distance 0 \
-      -O ${sample}.vcf.gz
+      -O normal.vcf.gz
+
+    # sometimes the name of the sample is kept as NORMAL, which is a problem in
+    # a pipeline where we want to analyze several of these samples. If that is
+    # the case, then we should rename the sample in the VCF file
+    name=$(gzip -dc normal.vcf.gz | head -2000 | grep "^#CHROM" | cut -f 10)
+    if [ "${name}" != "${sample}" ]; then 
+        ${gatk_path} --java-options "-Xmx4g" \
+          RenameSampleInVcf \
+          --INPUT=normal.vcf.gz \
+          --OUTPUT=${sample}.vcf.gz \
+          --NEW_SAMPLE_NAME=${sample}
+
+        ${gatk_path} --java-options "-Xmx4g" \
+          IndexFeatureFile \
+          -F ${sample}.vcf.gz
+
+        rm normal.vcf.gz
+    else
+        mv normal.vcf.gz ${sample}.vcf.gz
+        mv normal.vcf.gz.tbi ${sample}.vcf.gz.tbi
+    fi
   >>>
 
   output {
