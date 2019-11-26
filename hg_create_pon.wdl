@@ -74,7 +74,7 @@ task CreatePanel {
 
     ${gatk_path} --java-options "-Xmx4g" GenomicsDBImport \
       -R ${ref_fasta} --genomicsdb-workspace-path pon_db \
-      -L ${interval} \
+      -L ${interval} --merge-input-intervals \
       $vcfstring
 
     ${gatk_path} --java-options "-Xmx4g" CreateSomaticPanelOfNormals \
@@ -98,18 +98,10 @@ task MergeVCF {
   File ref_fasta_dict
 
   command <<<
-    vcfstring=""
-    for file in ${sep=' ' input_vcfs}; do
-      vcf="-I $file "
-      vcfstring=$vcfstring$vcf
-    done
-
-    ${gatk_path} --java-options "-Xmx4g" GatherVcfs \
-      $vcfstring \
-      -O panel.vcf.gz 
-
-    ${gatk_path} --java-options "-Xmx4g" IndexFeatureFile \
-      -F panel.vcf.gz    
+    ${gatk_path} --java-options "-Xmx4g" \
+      MergeVcfs \
+      --INPUT ${sep=' --INPUT ' input_vcfs} \
+      --OUTPUT panel.vcf.gz
   >>>
 
   output {
