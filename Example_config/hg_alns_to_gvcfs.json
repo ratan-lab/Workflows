@@ -1,0 +1,17 @@
+{
+  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX",
+  "HaplotypeCaller_ml.inputs": "/project/dutta_tumor/Ajay/Workflow/TEST_RUN/gvcf.txt",
+
+  "##_COMMENT2": "TOOLS OPTIONS",
+  "HaplotypeCaller_ml.gatk_path": "/nv/vol119/cphg-RLscratch/share/gatk-4.1.2.0/gatk",
+  "HaplotypeCaller_ml.samtools_path": "/nv/vol119/cphg-RLscratch/share/samtools-1.9/samtools",
+  "HaplotypeCaller_ml.scattered_calling_intervals_list": "/project/dutta_tumor/Ajay/Workflow/TEST_RUN/wgs_calling_regions.b37.interval_list",
+
+  "##_COMMENT3": "REFERENCE OPTIONS",  
+  "HaplotypeCaller_ml.ref_fasta": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37_decoy.fasta",
+  "HaplotypeCaller_ml.ref_fasta_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37_decoy.fasta.fai",
+  "HaplotypeCaller_ml.ref_dict": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37_decoy.dict",
+
+  "##COMMENT4": "OUTPUT",
+  "HaplotypeCaller_ml.final_out_dir": "/project/dutta_tumor/Ajay/Workflow/out_dir_gvcf/"
+}
