@@ -281,7 +281,7 @@ task GetNumberOfSamples {
     wc -l ${sample_name_map} | awk '{print $1}'
   >>>
   runtime {
-    memory: "1 GB"
+    requested_mem_per_cpu: 1000
     preemptible: 5
   }
   output {
@@ -335,8 +335,8 @@ task ImportGVCFs {
 
   >>>
   runtime {
-    memory: "7 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -377,8 +377,8 @@ task GenotypeGVCFs {
      -L ${interval}
   >>>
   runtime {
-    memory: "7 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -414,8 +414,8 @@ task HardFilterAndMakeSitesOnlyVcf {
 
   }
   runtime {
-    memory: "3.5 GB"
-    cpu: "1"
+    requested_mem_per_cpu: 3500
+    cpus: 1
     preemptible: 5
   }
   output {
@@ -458,8 +458,8 @@ task IndelsVariantRecalibrator {
       -resource:dbsnp,known=true,training=false,truth=false,prior=2 ${dbsnp_resource_vcf}
   }
   runtime {
-    memory: "26 GB"
-    cpu: "5"
+    requested_mem_per_cpu: 6000
+    cpus: 5
     preemptible: 5
   }
   output {
@@ -511,8 +511,8 @@ task SNPsVariantRecalibratorCreateModel {
       -resource:dbsnp,known=true,training=false,truth=false,prior=7 ${dbsnp_resource_vcf}
   }
   runtime {
-    memory: "104 GB"
-    cpu: "20"
+    requested_mem_per_cpu: 6000
+    cpus: 20
     preemptible: 5
   }
   output {
@@ -560,8 +560,8 @@ task SNPsVariantRecalibrator {
       -resource:dbsnp,known=true,training=false,truth=false,prior=7 ${dbsnp_resource_vcf}
   }
   runtime {
-    memory: "3.5 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 4000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -588,8 +588,8 @@ task GatherTranches {
       --output ${output_filename}
   >>>
   runtime {
-    memory: "7 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -637,8 +637,8 @@ task ApplyRecalibration {
       -mode SNP
   }
   runtime {
-    memory: "7 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -671,8 +671,8 @@ task GatherVcfs {
     --feature-file ${output_vcf_name}
   >>>
   runtime {
-    memory: "7 GB"
-    cpu: "2"
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
   output {
@@ -708,8 +708,8 @@ task CollectVariantCallingMetrics {
     File summary_metrics_file = "${metrics_filename_prefix}.variant_calling_summary_metrics"
   }
   runtime {
-    memory: "7 GB"
-    cpu: 2
+    requested_mem_per_cpu: 6000
+    cpus: 2
     preemptible: 5
   }
 }
@@ -733,8 +733,8 @@ task GatherMetrics {
     --OUTPUT ${output_prefix}
   >>>
   runtime {
-    memory: "3 GB"
-    cpu: "1"
+    requested_mem_per_cpu: 3000
+    cpus: 1
     preemptible: 5
   }
   output {
@@ -798,7 +798,7 @@ task DynamicallyCombineIntervals {
   }
 
   runtime {
-    memory: "3 GB"
+    requested_mem_per_cpu: 3000
     preemptible: 5
   }
 
