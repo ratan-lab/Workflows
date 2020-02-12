@@ -73,6 +73,11 @@ task align_markdup_sort_index {
     rm ${tmp_dir}/${outprefix}.ns.alignment.bam
   >>>
 
+  runtime {
+    cpus: threads
+    requested_mem_per_cpu: 6000
+  }
+
   output {
     File alignments = "${out_dir}/${outprefix}.alignment.bam"
     File alignments_index = "${out_dir}/${outprefix}.alignment.bam.bai"
