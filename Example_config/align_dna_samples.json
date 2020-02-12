@@ -1,0 +1,16 @@
+{
+  "##COMMENT1": "SAMPLES INFORMATION",
+  "AlignSamples.inputs": "/project/dutta_tumor/Ajay/Workflow/TEST_RUN/TAB_FILE2.txt",
+  "##COMMENT2": "TOOLS",
+  "AlignSamples.bwa": "/nv/vol119/cphg-RLscratch/share/bwa-0.7.17/bwa",
+  "AlignSamples.num_threads": 4,
+  "AlignSamples.samblaster": "/nv/vol119/cphg-RLscratch/share/samblaster/samblaster",
+  "AlignSamples.sambamba": "/nv/vol119/cphg-RLscratch/share/sambamba_v0.6.9",
+  "AlignSamples.samtools": "/nv/vol119/cphg-RLscratch/share/samtools-1.9/samtools",
+
+  "##COMMENT3": "OUTPUT AND PIPELINE OPTIONS",
+  "AlignSamples.reference": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37_decoy.fasta",
+  "AlignSamples.tmp_dir": "/project/dutta_tumor/Ajay/Workflow/tmp_dir",
+  "AlignSamples.final_out_dir": "/project/dutta_tumor/Ajay/Workflow/out_dir"
+}
+

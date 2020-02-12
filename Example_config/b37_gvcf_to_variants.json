@@ -1,0 +1,42 @@
+{
+  "##COMMENT1": "DATASET SPECIFIC",
+  "JointGenotyping.callset_name": "final",
+  "JointGenotyping.sample_names": [],
+  "JointGenotyping.input_gvcfs": [], 
+  "JointGenotyping.input_gvcfs_indices": [],
+  "JointGenotyping.final_out_dir": "/project/dutta_tumor/Ajay/Workflow/out_dir_combined/",
+
+  "##COMMENT2": "REFERENCE FILES",
+  "JointGenotyping.ref_fasta": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37.fasta",
+  "JointGenotyping.ref_dict": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37.dict",
+  "JointGenotyping.ref_fasta_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/human_g1k_v37.fasta.fai",
+
+  "##COMMENT3": "INTERVALS",
+  "JointGenotyping.unpadded_intervals_file": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/wgs_unpadded_intervals_file",
+  "JointGenotyping.eval_interval_list": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/wgs_evaluation_regions.b37.interval_list",
+
+  "##COMMENT4": "RESOURCE FILES",
+  "JointGenotyping.omni_resource_vcf": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/1000G_omni2.5.b37.vcf",
+  "JointGenotyping.omni_resource_vcf_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/1000G_omni2.5.b37.vcf.idx",
+  "JointGenotyping.one_thousand_genomes_resource_vcf": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/1000G_phase1.snps.high_confidence.b37.vcf",
+  "JointGenotyping.one_thousand_genomes_resource_vcf_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/1000G_phase1.snps.high_confidence.b37.vcf.idx",
+  "JointGenotyping.mills_resource_vcf": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/Mills_and_1000G_gold_standard.indels.b37.vcf",
+  "JointGenotyping.mills_resource_vcf_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/Mills_and_1000G_gold_standard.indels.b37.vcf.idx",
+  "JointGenotyping.hapmap_resource_vcf": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/hapmap_3.3.b37.vcf",
+  "JointGenotyping.hapmap_resource_vcf_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/hapmap_3.3.b37.vcf.idx",
+  "JointGenotyping.dbsnp_vcf": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/dbsnp_138.b37.vcf",
+  "JointGenotyping.dbsnp_vcf_index": "/nv/vol119/cphg-RLscratch/share/gatk_bundle/ftp.broadinstitute.org/bundle/2.8/b37/dbsnp_138.b37.vcf.idx",
+
+  "##COMMENT5": "VQSR PARAMETERS",
+  "JointGenotyping.SNP_VQSR_downsampleFactor": 10,
+  "JointGenotyping.snp_filter_level": 99.7,
+  "JointGenotyping.snp_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.8", "99.6", "99.5", "99.4", "99.3", "99.0", "98.0", "97.0", "90.0" ],
+  "JointGenotyping.snp_recalibration_annotation_values": ["QD", "MQRankSum", "ReadPosRankSum", "FS", "MQ", "SOR", "DP"],
+  "JointGenotyping.indel_filter_level": 99.7,
+  "JointGenotyping.indel_recalibration_tranche_values": ["100.0", "99.95", "99.9", "99.5", "99.0", "97.0", "96.0", "95.0", "94.0", "93.5", "93.0", "92.0", "91.0", "90.0"],
+  "JointGenotyping.indel_recalibration_annotation_values": ["FS", "ReadPosRankSum", "MQRankSum", "QD", "SOR", "DP"],
+
+  "##COMMENT6": "PATHS",
+  "JointGenotyping.gatk_path": "/nv/vol119/cphg-RLscratch/share/gatk-4.1.2.0/gatk"
+}
+
