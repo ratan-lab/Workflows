@@ -7,6 +7,7 @@
   "CreatePON.ref_fasta": "String",
   "CreatePON.ref_fasta_index": "String",
   "CreatePON.ref_fasta_dict": "String",
-  "CreatePON.scattered_calling_intervals_list": "String"
+  "CreatePON.scattered_calling_intervals_list": "String",
+  "CreatePON.gnomad_vcf": "String"
 }
 

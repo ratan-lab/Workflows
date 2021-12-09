@@ -7,6 +7,7 @@ workflow CreatePON {
   File ref_fasta_dict
   File ref_fasta_index
   File scattered_calling_intervals_list
+  File gnomad_vcf
 
   String gatk_path
 
@@ -38,6 +39,7 @@ workflow CreatePON {
         ref_fasta_index = ref_fasta_index,
         ref_fasta_dict = ref_fasta_dict,
         gatk_path = gatk_path,
+        gnomad_vcf = gnomad_vcf,
         interval = interval_file
     }
   }
@@ -62,6 +64,7 @@ task CreatePanel {
   File ref_fasta_dict
   String gatk_path
   File interval
+  File gnomad_vcf
 
   command <<<
     set -e
@@ -79,6 +82,7 @@ task CreatePanel {
 
     ${gatk_path} --java-options "-Xmx4g" CreateSomaticPanelOfNormals \
       -R ${ref_fasta} -V gendb://pon_db \
+      --germline-resource ${gnomad_vcf} \
       -L ${interval} \
       -O pon.vcf.gz
   >>>
