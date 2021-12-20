@@ -17,9 +17,9 @@ workflow JointGenotyping {
 
   String gatk_path
 
-  Array[String] snp_recalibration_tranche_values
+  Array[Float] snp_recalibration_tranche_values
   Array[String] snp_recalibration_annotation_values
-  Array[String] indel_recalibration_tranche_values
+  Array[Float] indel_recalibration_tranche_values
   Array[String] indel_recalibration_annotation_values
 
   File eval_interval_list
@@ -430,7 +430,7 @@ task IndelsVariantRecalibrator {
   String recalibration_filename
   String tranches_filename
 
-  Array[String] recalibration_tranche_values
+  Array[Float] recalibration_tranche_values
   Array[String] recalibration_annotation_values
 
   File sites_only_variant_filtered_vcf
@@ -475,7 +475,7 @@ task SNPsVariantRecalibratorCreateModel {
   Int downsampleFactor
   String model_report_filename
 
-  Array[String] recalibration_tranche_values
+  Array[Float] recalibration_tranche_values
   Array[String] recalibration_annotation_values
 
   File sites_only_variant_filtered_vcf
@@ -525,7 +525,7 @@ task SNPsVariantRecalibrator {
   String tranches_filename
   File? model_report
 
-  Array[String] recalibration_tranche_values
+  Array[Float] recalibration_tranche_values
   Array[String] recalibration_annotation_values
 
   File sites_only_variant_filtered_vcf
