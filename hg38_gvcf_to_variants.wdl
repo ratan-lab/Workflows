@@ -369,7 +369,7 @@ task GenotypeGVCFs {
     tar -xf ${workspace_tar}
     WORKSPACE=$( basename ${workspace_tar} .tar)
 
-    ${gatk_path} --java-options "-Xmx5g -Xms5g" \
+    ${gatk_path} --java-options "-Xmx10g -Xms10g" \
      GenotypeGVCFs \
      -R ${ref_fasta} \
      -O ${output_vcf_filename} \
@@ -550,7 +550,7 @@ task SNPsVariantRecalibrator {
   String gatk_path
 
   command {
-    ${gatk_path} --java-options "-Xmx3g -Xms3g" \
+    ${gatk_path} --java-options "-Xmx24g -Xms24g" \
       VariantRecalibrator \
       -V ${sites_only_variant_filtered_vcf} \
       -O ${recalibration_filename} \
@@ -567,8 +567,8 @@ task SNPsVariantRecalibrator {
       -resource:dbsnp,known=true,training=false,truth=false,prior=7 ${dbsnp_resource_vcf}
   }
   runtime {
-    requested_mem_per_cpu: 3500
-    cpus: 2
+    requested_mem_per_cpu: 6000
+    cpus: 5
     preemptible: 5
   }
   output {
