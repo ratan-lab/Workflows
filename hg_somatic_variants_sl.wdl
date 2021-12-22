@@ -83,6 +83,8 @@ task Mutect {
       --germline-resource ${gnomad} \
       --panel-of-normals ${ponvcf} \
       --f1r2-tar-gz f1r2.tar.gz \
+      --genotype-germline-sites true \
+      --genotype-pon-sites true \
       -L ${interval_file} \
       -O ${sample}.vcf.gz
   >>>
