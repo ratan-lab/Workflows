@@ -1,5 +1,5 @@
 {
-  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX",
+  "##_COMMENT1": "INPUT FILE WITH SAMPLE, BAMFILE, BAMINDEX in a row",
   "HaplotypeCaller_ml.inputs": "File",
 
   "##_COMMENT2": "TOOLS OPTIONS",
