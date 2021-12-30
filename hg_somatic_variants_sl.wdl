@@ -13,6 +13,8 @@ workflow CallSomaticSl {
   File normal_bam
   File normal_bai
   File scattered_calling_intervals_list
+  File exac_vcf
+  File exac_tbi
 
   Array[File] scattered_calling_intervals = read_lines(scattered_calling_intervals_list)
 
@@ -46,11 +48,22 @@ workflow CallSomaticSl {
       sample = sample    
   }
 
+  call EstimateContamination {
+    input:
+      gatk_path = gatk_path,
+      tumor_bam = tumor_bam,
+      tumor_bai = tumor_bai,
+      exac_vcf = exac_vcf,
+      exac_tbi = exac_tbi     
+  }
+
   output {
     File output_vcf = MergeVCFs.output_vcf
     File output_vcf_index = MergeVCFs.output_vcf_index
     File output_stats = MergeVCFs.output_stats
     File output_model = MergeVCFs.output_model
+    File segments = EstimateContamination.segments
+    File contamination = EstimateContamination.contamination
   }
 }
 
@@ -129,5 +142,35 @@ task MergeVCFs {
     File output_vcf_index = "${sample}.vcf.gz.tbi"
     File output_stats = "${sample}.vcf.gz.stats"
     File output_model = "read-orientation-model.tar.gz"
+  }
+}
+
+task EstimateContamination {
+  String gatk_path  
+  File tumor_bam
+  File tumor_bai
+  File exac_vcf
+  File exac_tbi
+
+  command <<<
+  set -e
+
+    ${gatk_path} --java-options "-Xmx4g"  \
+      GetPileupSummaries \
+      -I ${tumor_bam} \
+      -V ${exac_vcf} \
+      -L ${exac_vcf} \
+      -O getpileupsummaries.table
+
+    ${gatk_path} --java-options "-Xmx4g" \
+        CalculateContamination \
+        -I getpileupsummaries.table \
+        -tumor-segmentation segments.table \
+        -O calculatecontamination.table
+  >>>  
+
+  output {
+    File segments = "segments.table"
+    File contamination = "calculatecontamination.table"
   }
 } 
