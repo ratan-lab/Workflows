@@ -32,10 +32,10 @@
   "##COMMENT5": "VQSR PARAMETERS",
   "JointGenotyping.SNP_VQSR_downsampleFactor": "Int",
   "JointGenotyping.snp_filter_level": "Float",
-  "JointGenotyping.snp_recalibration_tranche_values": "Array[String]",
+  "JointGenotyping.snp_recalibration_tranche_values": "Array[Float]",
   "JointGenotyping.snp_recalibration_annotation_values": "Array[String]",
   "JointGenotyping.indel_filter_level": "Float",
-  "JointGenotyping.indel_recalibration_tranche_values": "Array[String]",
+  "JointGenotyping.indel_recalibration_tranche_values": "Array[Float]",
   "JointGenotyping.indel_recalibration_annotation_values": "Array[String]",
 
   "##COMMENT6": "PATHS",
