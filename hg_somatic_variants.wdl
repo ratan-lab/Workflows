@@ -14,6 +14,9 @@ workflow CallSomatic {
   File scattered_calling_intervals_list
 
   String gatk_path
+  
+  Boolean? orientation_bias
+  Boolean orientationbias = select_first([orientation_bias, true])
 
   Array[Array[File]] samples = read_tsv(inputs)
 
@@ -48,7 +51,8 @@ workflow CallSomatic {
         ref_fasta_index = ref_fasta_index,
         ref_fasta_dict = ref_fasta_dict,
         segments = CallSomaticSl.segments,
-        contamination = CallSomaticSl.contamination,   
+        contamination = CallSomaticSl.contamination,
+        orientation_bias = orientationbias,
         gatk_path = gatk_path
     }
   }
@@ -71,15 +75,18 @@ task FilterCalls {
   File model
   File segments
   File contamination
+  Boolean orientation_bias
 
   String output_file = basename(vcf, ".vcf.gz") + ".filtered.vcf.gz"
+  String ob_options = if orientation_bias then "--ob-priors ${model}" else ""
+
 
   command <<<
     ${gatk_path} FilterMutectCalls \
         -R ${ref_fasta} -V ${vcf} \
         --tumor-segmentation ${segments} \
         --contamination-table ${contamination} \
-        --ob-priors ${model} \
+        ${ob_options} \
         -O ${output_file}
   >>>   
 
