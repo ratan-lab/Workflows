@@ -23,4 +23,4 @@ Required files:
 
 Notes:
 * The read group for the BAM is created using the following expression
-  rg = "@RG\\tID:" + sample + "_" + lib + "_" + lane + "\\tSM:" + sample + "\\tPU:" + lane + "\\tPL:" + platform
+  rg = "@RG\\tID:" + sample + "_" + lib + "_" + "\\tLB" + lib + lane + "\\tSM:" + sample + "\\tPU:" + lane + "\\tPL:" + platform

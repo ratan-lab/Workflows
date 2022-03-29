@@ -14,7 +14,7 @@ task align_markdup_sort_index {
   String tmp_dir
   String picardjar
   String gatk
-  String dbnsp
+  String dbsnp
   String mills
   String indels
 
@@ -34,15 +34,15 @@ task align_markdup_sort_index {
     echo "alignment finished"
 
     # mark the duplicates
-    java -Xmx ${memsamba}G -jar ${picardjar} MarkDuplicates \
-      --INPUT=${tmp_dir}/${outprefix}.ns.alignment.bam \
-      --METRICS_FILE=${out_dir}/${outprefix}.dups.txt \
-      --OUTPUT=${tmp_dir}/${outprefix}.ns.dedup.alignment.bam \
-      --ASSUME_SORT_ORDER=queryname \
-      --MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 \
-      --REFERENCE_SEQUENCE=${reference} \
-      --TMP_DIR=${tmp_dir} \
-      --VALIDATION_STRINGENCY=LENIENT 
+    java -Xmx${memsambamba}g -jar ${picardjar} MarkDuplicates \
+      --INPUT ${tmp_dir}/${outprefix}.ns.alignment.bam \
+      --METRICS_FILE ${out_dir}/${outprefix}.dups.txt \
+      --OUTPUT ${tmp_dir}/${outprefix}.ns.dedup.alignment.bam \
+      --ASSUME_SORT_ORDER queryname \
+      --MAX_FILE_HANDLES_FOR_READ_ENDS_MAP 1000 \
+      --REFERENCE_SEQUENCE ${reference} \
+      --TMP_DIR ${tmp_dir} \
+      --VALIDATION_STRINGENCY LENIENT 
 
     # sort the alignments 
     ${sambamba} sort -m ${memsambamba}G --tmpdir=${tmp_dir} \
@@ -61,7 +61,7 @@ task align_markdup_sort_index {
       -R ${reference} \
       -I ${tmp_dir}/${outprefix}.dedup.alignment.bam \
       -O ${tmp_dir}/${outprefix}.recalib.txt \
-      --known-sites ${dbnsp} \
+      --known-sites ${dbsnp} \
       --known-sites ${mills} \
       --known-sites ${indels} 
 
@@ -70,14 +70,18 @@ task align_markdup_sort_index {
       -I ${tmp_dir}/${outprefix}.dedup.alignment.bam \
       -O ${tmp_dir}/${outprefix}.dedup.bqsr.alignment.bam \
       -bqsr ${tmp_dir}/${outprefix}.recalib.txt \
-      -SQQ 10 -SQQ 20 -SQQ 30 \
-      --preserve_qscores_less_than 6 \
-      --disable_indel_quals 
+      --static-quantized-quals 10 \
+      --static-quantized-quals 20 \
+      --static-quantized-quals 30 \
+      --preserve-qscores-less-than 6 
 
     # convert to CRAM
     ${samtools} view -T ${reference} -C \
       -o ${out_dir}/${outprefix}.alignment.cram \
       ${tmp_dir}/${outprefix}.dedup.bqsr.alignment.bam 
+
+    # index the CRAM file
+    ${samtools} index ${out_dir}/${outprefix}.alignment.cram
 
     # delete the temp directory
     rm ${tmp_dir}/${outprefix}.ns.alignment.bam
@@ -113,8 +117,11 @@ workflow align_dna {
   String samblaster
   String samtools
   String tmp_dir
-  String picardjar
+  String picard_jar
   String gatk
+  String dbsnp
+  String mills
+  String indels
 
   String? mq
   String mate_fq = select_first([mq, ""])
@@ -126,7 +133,7 @@ workflow align_dna {
   String outprefix = select_first([out_prefix, sample])
 
   String? read_group
-  String rg = "@RG\\tID:" + sample + "_" + lib + "_" + lane + "\\tSM:" + sample + "\\tPU:" + lane + "\\tPL:" + platform
+  String rg = "@RG\\tID:" + sample + "_" + lib + "_" + lane + "\\tLB:" + lib +  "\\tSM:" + sample + "\\tPU:" + lane + "\\tPL:" + platform
   String readgroup = select_first([read_group, rg])
 
   Int? num_threads
@@ -148,7 +155,10 @@ workflow align_dna {
       threads = threads,
       tmp_dir = tmp_dir,
       gatk = gatk,
-      picardjar = picardjar
+      picardjar = picard_jar,
+      dbsnp = dbsnp,
+      mills = mills,
+      indels = indels
   }
 
   output {

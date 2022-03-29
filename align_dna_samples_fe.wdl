@@ -12,6 +12,9 @@ workflow AlignSamples {
   String final_out_dir
   String picard_jar
   String gatk
+  String dbsnp
+  String mills
+  String indels
 
   Int? mem_sambamba
   Int memsambamba = select_first([mem_sambamba, 6])
@@ -37,8 +40,11 @@ workflow AlignSamples {
         tmp_dir = tmp_dir,
         mem_sambamba = memsambamba,
         num_threads = threads,
-        picardjar = picard_jar,
+        picard_jar = picard_jar,
         gatk = gatk,
+        dbsnp = dbsnp,
+        mills = mills,
+        indels = indels,
     }
 
     call copy {

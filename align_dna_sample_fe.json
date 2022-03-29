@@ -20,6 +20,9 @@
 
   "##_COMMENT3": "OUTPUT AND PIPELINE OPTIONS",
   "align_dna.reference": "String",
+  "align_dna.dbsnp": "String",
+  "align_dna.mills": "String",
+  "align_dna.indels": "String",
   "align_dna.tmp_dir": "String",
   "align_dna.out_prefix": "String? (optional)"
 }
