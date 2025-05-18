@@ -56,6 +56,10 @@ task align_markdup_sort_index {
       ${tmp_dir}/${outprefix}.dedup.alignment.bam
     echo "mapped: index finished"
 
+    # delete some of the files
+    rm ${tmp_dir}/${outprefix}.ns.alignment.bam
+    rm ${tmp_dir}/${outprefix}.ns.dedup.alignment.bam
+
     # base quality score recalibration
     ${gatk} BaseRecalibrator \
       -R ${reference} \
@@ -75,6 +79,10 @@ task align_markdup_sort_index {
       --static-quantized-quals 30 \
       --preserve-qscores-less-than 6 
 
+    # delete some of the files
+    rm ${tmp_dir}/${outprefix}.dedup.alignment.bam
+    rm ${tmp_dir}/${outprefix}.dedup.alignment.bam.bai
+
     # convert to CRAM
     ${samtools} view -T ${reference} -C \
       -o ${out_dir}/${outprefix}.alignment.cram \
@@ -84,9 +92,8 @@ task align_markdup_sort_index {
     ${samtools} index ${out_dir}/${outprefix}.alignment.cram
 
     # delete the temp directory
-    rm ${tmp_dir}/${outprefix}.ns.alignment.bam
-    rm ${tmp_dir}/${outprefix}.ns.dedup.alignment.bam
     rm ${tmp_dir}/${outprefix}.dedup.bqsr.alignment.bam 
+    rm ${tmp_dir}/${outprefix}.dedup.bqsr.alignment.bai
   >>>
 
   runtime {
